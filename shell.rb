@@ -6,12 +6,17 @@ require 'pp'
 $pids = []
 
 def main
-  while cmdline = Readline.readline("> ", true)
+  while cmdline = Readline.readline("| ", true)
     tree = parse_cmdline(cmdline)
-    next if tree == :empty
-    $pids = tree.execute($stdin.fileno, $stdout.fileno)
-    $pids.each do |pid|
-      Process.wait(pid)
+    case tree
+    when :empty
+      next
+    else
+      $pids = tree.execute($stdin.fileno, $stdout.fileno)
+      $pids.each do |pid|
+        next if pid == 0
+        Process.wait(pid)
+      end
     end
   end
   puts ''
@@ -52,11 +57,12 @@ class Pipeline
   end
 
   def execute(stdin, stdout)
-    reader, writer = IO.pipe
-    pids = @left.execute(stdin, writer.fileno) + @right.execute(reader.fileno, stdout)
-    reader.close
-    writer.close
-    return pids
+    begin
+      reader, writer = IO.pipe
+      return @left.execute(stdin, writer.fileno) + @right.execute(reader.fileno, stdout)
+    ensure
+      [reader, writer].each{|fd| fd.close }
+    end
   end
 end
 
@@ -66,7 +72,17 @@ class Command
   end
 
   def execute(stdin, stdout)
-    [spawn(*@args, 0 => stdin, 1 => stdout)]
+    case @args[0]
+    when "cd"
+      Dir.chdir(@args[1])
+      return [0]
+    when "pwd"
+      myout = IO.new(stdout)
+      myout.puts Dir.pwd
+      return [0]
+    else
+      [spawn(*@args, 0 => stdin, 1 => stdout)]
+    end
   end
 end
 
