@@ -9,6 +9,7 @@ The first function of a shell is to interact, and only a second to write program
 ```
 $ with <net-context>
 ```
+This should set the context for single letter options. For example -h should always expand to --host=xxx in net-context, and -h=yyy should expand to --host=yyy. -wl for example, might expand to --port=80 --host=localhost
 
 ## Variables
 
@@ -47,7 +48,17 @@ Old utilities might still use single field records, but a wrapper can be used to
 
 * Emacs (modeless + ctrl keys)
 * Vi  (mode + verb object)
-* Kakoune (mode + object verb)
+* Kakoune/sed (mode + object verb)
+
+## Type info if needed
+
+The shell should parse the command line, and determine the type info of each commands by interrogating the command with required options in a typeinterrogation environment.
+
+(Check also how powershell does type checking)
+
+## Addressing results of commands
+
+To avoid explicity copy/paste operations, consider using a variable such as `itor _` in many repls.
 
 ## Allow detaching of current process from terminal by default, and reattaching
 
@@ -78,7 +89,6 @@ http://www.ceri.memphis.edu/people/smalley/ESCI7205F2009/misc_files/The_truth_ab
 * Optimize cats, and other pipe fragments so that the useless-use-of-cat objection is not raised against the user, and implementor does not have an incentive to bake things in.
 * Pipes should always reinterpret their output to ascii by default. They can be converted back at the end points either at the starting or at the end of '>' so the pipes can always expect correct filed and record separators and types
 * Making '<' xxx (like cat) into source and '>' into sink can allow us to annotate and typecheck the entire pipeline; i.e whether the pipeline expects ascii, json, xml or binary
-* SOLVED: If we want to pass in meta info like labels, how do we do that making sure that a stream can be interpreted from any point? (unless we are OK with annotating every record): Solution - we can pass the meta info as environment variable in the child process or as /env files. This requires that either the downstream process is a child, or there is a way to communicate with upstream.
 * Parallel by default: The source should parallelize the records, and sink should serialize it based on their sequence number. The serial dependency should not be allowed except in carefully demarcated areas using a type system.
 * Filters should start/end with '?' i.e ?awk, and those that require serial dependence should start/end with '!' i.e !sort or !sum
 * Allow easy and nested strings with {} or {xx:} where {} is interpreted according to xxx
