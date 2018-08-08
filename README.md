@@ -76,7 +76,7 @@ To avoid explicity copy/paste operations, consider using a variable such as `ito
 * Use +> for append (maybe)
 * Allow named pipes to be created just for the session perhaps by :> syntax
 * Handholding may be counterproductive: http://dl.acm.org/citation.cfm?id=1150148
-* http://www.catb.org/~esr/writings/taouu/taouu.html
+* [The art of unix usability](http://www.catb.org/~esr/writings/taouu/taouu.html)
 * Remember unix domain sockets; you can pass open files over them; it may be a reasonable implementation for higher dimentional/infinite records. i.e a list of open fds pased as a single record in a stream
 * Differentiate between map and fold/filter pipes clearly with types; For the awk like pipe, you can use Null record for those records selected away to other pipes so that they can be recombined later. Same could be used for error records
 * Think carefully about whether it should be a command line or an Rstudio/Python notebook like interface
