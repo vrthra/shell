@@ -72,7 +72,7 @@ Old utilities might still use single field records, but a wrapper can be used to
 * A transpose operator would be nice.
 * We really need the record separate and guarantee from programs to flush each record atomically to make sure that the outputs and combinations make sense.
 http://www.ceri.memphis.edu/people/smalley/ESCI7205F2009/misc_files/The_truth_about_Unix_cleaned.pdf
-http://www.catb.org/~esr/writings/taoup/html/ch06s06.html
+* [Bernstein Chaining](http://www.catb.org/~esr/writings/taoup/html/ch06s06.html)
 * Be consistent with short options (=). They are made to combine, so they should be boolean.
 * Think deeply about whether to take advantage of peoples knowledge of unix shells and reuse the names (and confuse people); or break completely and thus not confuse people (but make transition really hard)
 * Optimize cats, and other pipe fragments so that the useless-use-of-cat objection is not raised against the user, and implementor does not have an incentive to bake things in.
